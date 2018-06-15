@@ -6,27 +6,27 @@
  */
 
 module.exports = {
-	create: function(req, res){
-		Restaurant.create(req.body).then(function(createdRestaurant){
+	create: (req, res) => {
+		Restaurant.create(req.body).then(createdRestaurant =>{
 			return ResponseService.json(200, res, 'Restaurant created successfully', createdRestaurant);
-		}).catch(function(err){
+		}).catch(err => {
 			return ValidationService.jsonResolveError(err, Restaurant, res);
 		});
 	},
-	view: function(req, res){
+	view: (req, res) => {
 		Restaurant.findOne({ id: req.params.id, isDeleted: false }).populate('meals').populate('reviews')
-				.then(function(restaurant){
-		            if (_.isEmpty(restaurant)) {
-                		return ResponseService.json(404, res, "Restaurant not found");
-            		}
-					return ResponseService.json(200, res, 'Restaurant retrieved successfully', restaurant);
-				})
-				.catch(function(err){
-					return ValidationService.jsonResolveError(err, Restaurant, res);
-				});
+			.then(restaurant => {
+				if (_.isEmpty(restaurant)) {
+					return ResponseService.json(404, res, "Restaurant not found");
+				}
+				return ResponseService.json(200, res, 'Restaurant retrieved successfully', restaurant);
+			})
+			.catch(err => {
+				return ValidationService.jsonResolveError(err, Restaurant, res);
+			});
 
 	},
-	list: function(req, res){
+	list: (req, res) => {
 		let listQry = Restaurant.find({ isDeleted: false})
 		const qryKeysArr = Object.keys(req.query);
 		if (qryKeysArr.length === 1) {
@@ -46,32 +46,32 @@ module.exports = {
 
 		listQry.then(restaurants => {
 			return ResponseService.json(200, res, 'Restaurants retrieved successfully', restaurants);
-		}).catch(function(err){
+		}).catch(err => {
 			return ValidationService.jsonResolveError(err, Restaurant, res);
 		});
 	},
-	update: function(req, res){
+	update: (req, res) => {
 		Restaurant.update({ id: req.params.id, isDeleted: false }, req.body)
-				.then(function(updatedRestaurant){
-				    if (!updatedRestaurant.length) {
-                		return ResponseService.json(404, res, "Restaurant not found");
-           		 	}
-					return ResponseService.json(200, res, 'Restaurant updated successfully', updatedRestaurant[0]);
-				})
-				.catch(function(err){
-					return ValidationService.jsonResolveError(err, Restaurant, res);
-				})
+			.then(updatedRestaurant => {
+				if (!updatedRestaurant.length) {
+					return ResponseService.json(404, res, "Restaurant not found");
+				}
+				return ResponseService.json(200, res, 'Restaurant updated successfully', updatedRestaurant[0]);
+			})
+			.catch(err => {
+				return ValidationService.jsonResolveError(err, Restaurant, res);
+			})
 	},
-	delete: function(req, res){
+	delete: (req, res) => {
 		Restaurant.softDelete({ id: req.params.id, isDeleted: false })
-				.then(function(deletedRestaurant){
-					if (!deletedRestaurant.length) {
-                		return ResponseService.json(404, res, "Restaurant not found");
-            		}
-					return ResponseService.json(200, res, 'Restaurant deleted successfully', deletedRestaurant[0]);
-				})
-				.catch(function(err){
-					return ValidationService.jsonResolveError(err, Restaurant, res);
-				});
+			.then(deletedRestaurant => {
+				if (!deletedRestaurant.length) {
+					return ResponseService.json(404, res, "Restaurant not found");
+				}
+				return ResponseService.json(200, res, 'Restaurant deleted successfully', deletedRestaurant[0]);
+			})
+			.catch(err => {
+				return ValidationService.jsonResolveError(err, Restaurant, res);
+			});
 	}
 };

@@ -25,48 +25,48 @@ module.exports = {
 			return ValidationService.jsonResolveError(err, Review, res);
 		});
 	},
-	view: function(req, res){
+	view: (req, res) => {
 		Review.findOne({ id: req.params.id, isDeleted: false })
-				.then(function(review){
-		            if (_.isEmpty(review)) {
-                		return ResponseService.json(404, res, "Review not found");
-            		}
-					return ResponseService.json(200, res, 'Review retrieved successfully', review);
-				})
-				.catch(function(err){
-					return ValidationService.jsonResolveError(err, Review, res);
-				});
+			.then(review => {
+				if (_.isEmpty(review)) {
+					return ResponseService.json(404, res, "Review not found");
+				}
+				return ResponseService.json(200, res, 'Review retrieved successfully', review);
+			})
+			.catch(err => {
+				return ValidationService.jsonResolveError(err, Review, res);
+			});
 
 	},
-	list: function(req, res){
-		Review.find({ isDeleted: false }).then(function(reviews){
+	list: (req, res) => {
+		Review.find({ isDeleted: false }).then(reviews => {
 			return ResponseService.json(200, res, 'Reviews retrieved successfully', reviews);
-		}).catch(function(err){
+		}).catch(err => {
 			return ValidationService.jsonResolveError(err, Review, res);
 		});
 	},
-	update: function(req, res){
+	update: (req, res) => {
 		Review.update({ id: req.params.id, isDeleted: false }, req.body)
-				.then(function(updatedReview){
-				    if (!updatedReview.length) {
-                		return ResponseService.json(404, res, "Review not found");
-           		 	}
-					return ResponseService.json(200, res, 'Review updated successfully', updatedReview[0]);
-				})
-				.catch(function(err){
-					return ValidationService.jsonResolveError(err, Review, res);
-				})
+			.then(updatedReview => {
+				if (!updatedReview.length) {
+					return ResponseService.json(404, res, "Review not found");
+				}
+				return ResponseService.json(200, res, 'Review updated successfully', updatedReview[0]);
+			})
+			.catch(err => {
+				return ValidationService.jsonResolveError(err, Review, res);
+			})
 	},
-	delete: function(req, res){
+	delete: (req, res) => {
 		Review.softDelete({ id: req.params.id, isDeleted: false })
-				.then(function(deletedReview){
-					if (!deletedReview.length) {
-                		return ResponseService.json(404, res, "Review not found");
-            		}
-					return ResponseService.json(200, res, 'Review deleted successfully', deletedReview[0]);
-				})
-				.catch(function(err){
-					return ValidationService.jsonResolveError(err, Review, res);
-				});
+			.then(deletedReview => {
+				if (!deletedReview.length) {
+					return ResponseService.json(404, res, "Review not found");
+				}
+				return ResponseService.json(200, res, 'Review deleted successfully', deletedReview[0]);
+			})
+			.catch(err => {
+				return ValidationService.jsonResolveError(err, Review, res);
+			});
 	}
 };

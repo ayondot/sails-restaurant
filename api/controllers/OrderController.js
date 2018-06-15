@@ -10,7 +10,7 @@ function getDistance(options) {
     const distance = require("google-distance");
      return new Promise((resolve, reject) => {
         distance.get(options, 
-            function(err, data) {
+            (err, data) => {
               if (err) return reject(err);
               return resolve(data);
           });
@@ -33,7 +33,6 @@ module.exports = {
                 })
             })
             
-            console.log(restaurant.location);
             req.body.price = price;
             return [Order.create(req.body), getDistance({
                 origin: restaurant.location.lat + "," + restaurant.location.long,
