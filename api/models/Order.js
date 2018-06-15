@@ -12,12 +12,17 @@ module.exports = {
         collection: 'meal',
         via: 'orders'
       },
+      price: {
+        type: 'string'
+      },
       location: {
         type: 'json'
       },
+      restaurant: {
+        model: 'restaurant'
+      },
       address: {
-        type: 'string',
-        required: true
+        type: 'string'
       },
       isDeleted: {
         type: 'boolean',

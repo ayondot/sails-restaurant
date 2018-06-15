@@ -6,55 +6,54 @@
  */
 
 module.exports = {
-	create: function (req, res) {
-		const tryin = {name: "fufu", price: 10};
-		Meal.create(tryin).then(function (createdMeal) {
+	create: (req, res) => {
+		Meal.create(req.body).then(createdMeal => {
 			return ResponseService.json(200, res, 'Meal created successfully', createdMeal);
-		}).catch(function (err) {
+		}).catch(err => {
 			return ValidationService.jsonResolveError(err, Meal, res);
 		});
 	},
-	view: function (req, res) {
-		Meal.findOne({ id: req.params.id, isDeleted: false })
-			.then(function (meal) {
+	view: (req, res) => {
+		Meal.findOne({ id: req.params.id, isDeleted: false }).populate('restaurant')
+			.then(meal => {
 				if (_.isEmpty(meal)) {
 					return ResponseService.json(404, res, "Meal not found");
 				}
-				return ResponseService.json(200, res, 'Meal retrieved successfully', Meal);
+				return ResponseService.json(200, res, 'Meal retrieved successfully', meal);
 			})
-			.catch(function (err) {
+			.catch(err => {
 				return ValidationService.jsonResolveError(err, Meal, res);
 			});
 
 	},
-	list: function (req, res) {
-		Meal.find({ isDeleted: false }).then(function (meals) {
+	list: (req, res) => {
+		Meal.find({ isDeleted: false }).then(meals => {
 			return ResponseService.json(200, res, 'Meals retrieved successfully', meals);
-		}).catch(function (err) {
+		}).catch(err => {
 			return ValidationService.jsonResolveError(err, Meal, res);
 		});
 	},
-	update: function (req, res) {
+	update: (req, res) => {
 		Meal.update({ id: req.params.id, isDeleted: false }, req.body)
-			.then(function (updatedMeal) {
+			.then(updatedMeal => {
 				if (!updatedMeal.length) {
 					return ResponseService.json(404, res, "Meal not found");
 				}
 				return ResponseService.json(200, res, 'Meal updated successfully', updatedMeal[0]);
 			})
-			.catch(function (err) {
+			.catch(err => {
 				return ValidationService.jsonResolveError(err, Meal, res);
 			})
 	},
-	delete: function (req, res) {
+	delete: (req, res) => {
 		Meal.softDelete({ id: req.params.id, isDeleted: false })
-			.then(function (deletedMeal) {
+			.then(deletedMeal => {
 				if (!deletedMeal.length) {
 					return ResponseService.json(404, res, "Meal not found");
 				}
 				return ResponseService.json(200, res, 'Meal deleted successfully', deletedMeal[0]);
 			})
-			.catch(function (err) {
+			.catch(err => {
 				return ValidationService.jsonResolveError(err, Meal, res);
 			});
 	}
